@@ -132,6 +132,35 @@ Possible options:
 --interlace on | off
 --composite on | off
 
+Current Scaffold
+
+The current executable is named `taperot`.
+
+It validates command-line options and prints the requested processing plan. It does not decode, process, or encode video yet.
+
+Usage:
+
+```sh
+taperot <input> <output> [options]
+```
+
+Supported scaffold options:
+
+```text
+--format <vhs|betamax|umatic|broadcast|camcorder>
+--generation <number>
+--tracking <0.0-1.0>
+--tape-wear <0.0-1.0>
+--chroma-bleed <0.0-1.0>
+--timebase-jitter <0.0-1.0>
+--dropouts <0.0-1.0>
+--head-switch-noise <on|off>
+--interlace <on|off>
+--composite <on|off>
+--seed <integer>
+--help
+```
+
 Implementation Strategy
 
 The first version should be practical and modular.
@@ -180,19 +209,30 @@ Avoid:
 
 Build
 
-Build instructions will be added once the project structure is finalized.
+Requirements:
 
-Expected future direction:
+- CMake 3.16 or newer
+- A C++17 compiler
 
+Build:
+
+```sh
 cmake -S . -B build
 cmake --build build
+```
+
+Run the scaffold:
+
+```sh
+./build/taperot input.mp4 output.mp4 --format vhs --generation 3 --tracking 0.5 --tape-wear 0.7 --seed 1234
+```
 
 Project Status
 
 Experimental.
 
-The current goal is to establish a clean C++ architecture for decoding video, transforming frames, and writing output, while keeping the effect modules independent enough to improve over time.
+The current goal is to establish a clean C++ architecture for parsing user intent, representing frames, and shaping independent effect modules. Real video decoding, effect mutation, and output encoding are intentionally not implemented yet.
 
 License
 
-License undecided.
+BSD 3-Clause. See `LICENSE`.
