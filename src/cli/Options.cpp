@@ -187,7 +187,7 @@ Options:
 
 Current scaffold:
   Validates arguments and prints the requested processing plan.
-  It does not decode, mutate, or encode video yet.
+  The CLI does not decode, mutate, or encode video yet.
 )";
 }
 

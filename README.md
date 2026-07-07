@@ -136,7 +136,9 @@ Current Scaffold
 
 The current executable is named `taperot`.
 
-It validates command-line options and prints the requested processing plan. It does not decode, process, or encode video yet.
+It validates command-line options and prints the requested processing plan. The CLI does not decode, process, or encode video yet.
+
+The core library can mutate synthetic in-memory planar frames for tests. Frames currently use one luma plane and two chroma planes.
 
 Usage:
 
@@ -160,6 +162,15 @@ Supported scaffold options:
 --seed <integer>
 --help
 ```
+
+Implemented In-Memory Effects
+
+The current frame effects operate on planar luma/chroma buffers and are deterministic for the same input, parameters, and seed.
+
+- `ChromaDegrade` horizontally smears and weakens chroma planes while leaving luma detail intact. `strength` is expected to be `0.0` to `1.0`.
+- `LineJitter` shifts individual scanlines left or right to approximate time-base instability. `strength` controls the maximum offset allowed.
+- `Dropout` creates ragged horizontal luma/chroma damage streaks from simulated tape signal loss. `strength` controls count, length, thickness, and severity.
+- `HeadSwitchNoise` corrupts a localized lower-frame band with tearing, luma disturbance, and chroma disturbance. `strength` is `0.0` to `1.0`; `bandFraction` controls the bottom band size.
 
 Implementation Strategy
 
@@ -221,6 +232,12 @@ cmake -S . -B build
 cmake --build build
 ```
 
+Test:
+
+```sh
+ctest --test-dir build --output-on-failure
+```
+
 Run the scaffold:
 
 ```sh
@@ -231,7 +248,7 @@ Project Status
 
 Experimental.
 
-The current goal is to establish a clean C++ architecture for parsing user intent, representing frames, and shaping independent effect modules. Real video decoding, effect mutation, and output encoding are intentionally not implemented yet.
+The current goal is to establish a clean C++ architecture for parsing user intent, representing frames, and shaping independent effect modules. Real video decoding and output encoding are intentionally not implemented yet.
 
 License
 
